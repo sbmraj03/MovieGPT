@@ -1,5 +1,6 @@
 import { BG_URL } from "../utils/constants";
 import GptSearchBar from "./GPTSearchBar";
+import GPTMovieSuggestions from "./GPTMovieSuggestions";
 
 const GPTSearch = () => {
     return (
@@ -15,6 +16,8 @@ const GPTSearch = () => {
             {/* Search Bar with higher z-index */}
             <div className="relative z-10">
                 <GptSearchBar />
+                <GPTMovieSuggestions />
+                
             </div>
         </div>
     )
