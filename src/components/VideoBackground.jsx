@@ -7,12 +7,11 @@ const VideoBackground = ({ movieId }) => {
   useMovieTrailer(movieId)
 
   return (
-    <div className="relative w-[99vw] h-screen overflow-hidden">
+    <div className="relative w-full h-screen overflow-hidden">
       {/* YouTube video wrapper */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
         <iframe
           className="w-full h-full scale-125" 
-          // scale-125 makes it zoom enough to cover black bars
           src={`https://www.youtube.com/embed/${trailerVideo?.key}?autoplay=0&mute=1&controls=0&showinfo=0&loop=1&playlist=${trailerVideo?.key}&vq=tiny`}
           title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

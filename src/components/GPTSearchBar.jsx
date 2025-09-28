@@ -61,7 +61,7 @@ const GPTSearchBar = () => {
             // For each movie, search TMDB API
             console.log("Searching TMDB for movies...");
             const promiseArray = gptMovies.map((movie) => searchMovieTMDB(movie));
-            
+
             const tmdbResults = await Promise.all(promiseArray);
             console.log("TMDB Results:", tmdbResults);
 
@@ -69,7 +69,7 @@ const GPTSearchBar = () => {
             dispatch(
                 addGptMovieResult({ movieNames: gptMovies, movieResults: tmdbResults })
             );
-            
+
             console.log("Results stored in Redux store");
 
         } catch (error) {
@@ -78,18 +78,25 @@ const GPTSearchBar = () => {
     };
 
     return (
-        <div className="pt-[10%] flex justify-center relative z-20">
-            <form className="w-1/2 bg-gray-800 border border-gray-600 rounded-lg grid grid-cols-12 shadow-2xl" onSubmit={(e) => e.preventDefault()}>
-                <input
-                    ref={searchText}
-                    type="text"
-                    className="p-4 m-4 col-span-9 bg-gray-700 text-white placeholder-gray-300 border border-gray-600 rounded focus:outline-none focus:border-red-500"
-                    placeholder={lang[langKey].gptSearchPlaceholder}
-                />
-                <button className="col-span-3 m-4 py-2 px-4 bg-red-700 text-white rounded-lg hover:bg-red-800 transition-colors"
-                    onClick={handleGeminiSearchClick}>
-                    {lang[langKey].search}
-                </button>
+        <div className="pt-[10%] flex flex-col justify-center items-center relative z-20 px-4">
+            <form className="w-full max-w-md md:max-w-2xl bg-gray-800 border border-gray-600 rounded-lg shadow-2xl"
+                onSubmit={(e) => e.preventDefault()}>
+
+                {/* Mobile: Stacked layout */}
+                <div className="flex flex-col md:grid md:grid-cols-12 gap-3 md:gap-3 p-4">
+                    <input
+                        ref={searchText}
+                        type="text"
+                        className="w-full md:col-span-9 p-4 md:mr-4 bg-gray-700 text-white placeholder-gray-300 border border-gray-600 rounded focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 transition-all"
+                        placeholder={lang[langKey].gptSearchPlaceholder}
+                    />
+                    <button
+                        className="w-full md:col-span-3 py-4 md:py-2 px-4 bg-red-700 text-white rounded-lg hover:bg-red-800 active:bg-red-900 transition-colors font-medium"
+                        onClick={handleGeminiSearchClick}
+                    >
+                        {lang[langKey].search}
+                    </button>
+                </div>
             </form>
         </div>
     );

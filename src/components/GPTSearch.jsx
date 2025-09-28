@@ -14,7 +14,7 @@ const GPTSearch = () => {
                 />
             </div>
             {/* Search Bar with higher z-index */}
-            <div className="relative z-10">
+            <div className="relative z-10 pt-32 md:pt-0">
                 <GptSearchBar />
                 <GPTMovieSuggestions />
                 

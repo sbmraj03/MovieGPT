@@ -18,7 +18,6 @@ const Login = () => {
   const email= useRef(null)
   const password= useRef(null)
 
-
   const handleButtonClick = () => {
     const message = checkValidData(email.current.value, password.current.value)
     setErrorMessage(message)
@@ -26,17 +25,13 @@ const Login = () => {
     if (message) {
       setTimeout(() => {
         setErrorMessage(null);
-      }, 5000); // 5 
-      
+      }, 5000);
       return;
     }
 
-    console.log(isSignInForm)
     if(!isSignInForm){
-      console.log("HI i am in signup form")
       createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
       .then((userCredential) => {
-        // Signed up 
         const user = userCredential.user;
         updateProfile(user, {
           displayName: name.current.value,
@@ -53,111 +48,136 @@ const Login = () => {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-
         setErrorMessage(errorCode + " --==- " + errorMessage);
-        
       });
     }
     else{
-      console.log("HI i am in signIn form")
       signInWithEmailAndPassword(auth, email.current.value, password.current.value)
       .then((userCredential) => {
-        // Signed in 
         const user = userCredential.user;
         navigate("/browse")
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-
         setErrorMessage(errorCode + " " + errorMessage);
       });
     }
-
-
   }
 
   const toggleSignInForm= () => {
     setIsSignInForm(!isSignInForm)
   }
+
+  const handleGuestLogin = () => {
+    const guestEmail = "guest_user@gmail.com";
+    const guestPassword = "Guest@1234";
+    
+    signInWithEmailAndPassword(auth, guestEmail, guestPassword)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        navigate("/browse");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        setErrorMessage(`Guest login failed: ${errorCode} - ${errorMessage}`);
+      });
+  }
+
   return (
-    <div className="relative w-full h-screen overflow-hidden">
-      {/* Header */}
-      <Header />
+    <div className="relative w-full min-h-screen overflow-hidden">
+      {/* Fixed Header */}
+      <div className="fixed top-0 left-0 right-0 z-50">
+        <Header />
+      </div>
 
       {/* Background Image */}
-      <div className="absolute">
+      <div className="absolute inset-0">
         <img
-          className=" w-full h-full object-cover"
+          className="w-full h-full object-cover"
           src={BG_URL}
-          alt="logo"
+          alt="Netflix background"
         />
-
       </div>
 
       {/* Overlay */}
-      <div className="absolute inset-0 w-full bg-black opacity-55 z-10 h-full" />
+      <div className="absolute inset-0 bg-black/60" />
 
+      {/* Sign In Form - Added pt-20 to account for fixed header */}
+      <div className="relative z-10 flex items-center justify-center min-h-screen px-4 pt-20 pb-8">
+        <div className="bg-black/80 backdrop-blur-sm px-6 sm:px-8 md:px-12 py-8 sm:py-10 md:py-12 rounded-lg w-full max-w-md text-white">
+          <h1 className="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8">
+            {isSignInForm ? "Sign In" : "Sign Up"}
+          </h1>
 
-      {/* Sign In Form */}
-      <div className="relative z-10 flex items-center justify-center h-full">
-        <div className="bg-black opacity-80 px-10 py-8 rounded-md max-w-md w-full text-white mt-20">
-          <h1 className="text-3xl font-semibold mb-6">{isSignInForm ? "Sign In" : "Sign Up"}</h1>
-
-          <form className="flex flex-col space-y-4" onSubmit= {(e) => e.preventDefault()}>
-            {
-              !isSignInForm && 
-                <input
-                  ref= {name}
-                  type="text"
-                  placeholder="Full Name"
-                  className="bg-[#333] text-white px-4 py-3 rounded focus:outline-none"
-                />
+          <form className="flex flex-col space-y-4 sm:space-y-5" onSubmit={(e) => e.preventDefault()}>
+            {!isSignInForm && 
+              <input
+                ref={name}
+                type="text"
+                placeholder="Full Name"
+                className="bg-gray-700/80 text-white px-4 py-3 sm:py-4 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 transition-all"
+              />
             }
             <input
-              ref= {email}
+              ref={email}
               type="email"
               placeholder="Email or mobile number"
-              className="bg-[#333] text-white px-4 py-3 rounded focus:outline-none"
+              className="bg-gray-700/80 text-white px-4 py-3 sm:py-4 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 transition-all"
             />
             <input
-              ref= {password}
+              ref={password}
               type="password"
               placeholder="Password"
-              className="bg-[#333] text-white px-4 py-3 rounded focus:outline-none"
+              className="bg-gray-700/80 text-white px-4 py-3 sm:py-4 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 transition-all"
             />
 
-            <p className="text-red-500 font-bold text-lg py-2">{errorMessage}</p>
+            {errorMessage && (
+              <p className="text-red-500 font-medium text-sm sm:text-base py-2">
+                {errorMessage}
+              </p>
+            )}
 
-            <button className="bg-red-600 hover:bg-red-700 cursor-pointer transition font-semibold py-3 rounded opacity-{100}" onClick={handleButtonClick}>
+            <button 
+              className="bg-red-600 hover:bg-red-700 active:bg-red-800 font-semibold py-3 sm:py-4 rounded-md transition-colors duration-200"
+              onClick={handleButtonClick}
+            >
               {isSignInForm ? "Sign In" : "Sign Up"}
             </button>
           </form>
 
-          <div className="flex items-center justify-between mt-4 text-sm text-gray-400">
-            <label className="flex items-center gap-2">
-              <input type="checkbox" className="accent-white" />
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-6 gap-4 sm:gap-2 text-sm text-gray-400">
+            <label className="flex items-center gap-2 cursor-pointer hover:text-white transition-colors">
+              <input type="checkbox" className="accent-red-600" />
               Remember me
             </label>
-            <a href="#" className="hover:underline">
-              Forgot password?
-            </a>
           </div>
 
-          <div className="text-sm text-gray-400 mt-6">
-            {isSignInForm ? "New to Netflix?" : "Already a User"} {" "}
-            <a href="#" className="text-white hover:underline" onClick={toggleSignInForm}>
+          <div className="text-sm text-gray-400 mt-6 sm:mt-8">
+            {isSignInForm ? "New to Netflix?" : "Already a User?"}{" "}
+            <button 
+              className="text-white hover:underline ml-1 transition-colors"
+              onClick={toggleSignInForm}
+            >
               {isSignInForm ? "Sign Up Now" : "Sign In Now"}
-            </a>
+            </button>
           </div>
 
-          <p className="text-xs text-gray-500 mt-6">
-            This page is protected by Google reCAPTCHA to ensure you're not a
-            bot.{" "}
-            <a href="#" className="text-blue-500 hover:underline">
-              Learn more.
-            </a>
-          </p>
+          {/* Guest User Section */}
+          <div className="mt-6 pt-6 border-t border-gray-700">
+            <div className="text-center">
+              <p className="text-gray-400 text-sm mb-3">
+                Don't have an account and feeling lazy to sign up?
+              </p>
+              <button 
+                className="w-full bg-gray-600 hover:bg-gray-700 active:bg-gray-800 font-semibold py-3 sm:py-4 rounded-md transition-colors duration-200 text-white"
+                onClick={handleGuestLogin}
+              >
+                Sign in as Guest User
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
