@@ -13,7 +13,7 @@ const SecondaryContainer = () => {
   
   return (
       <div className='bg-black w-full'>
-        <div className="-mt-52 relative z-20">
+        <div className="-mt-20 md:-mt-52 relative z-20">
           {/* Keep stable placeholders for each section to avoid layout shifts */}
           {movies ? (
             <>
