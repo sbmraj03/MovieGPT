@@ -40,7 +40,12 @@ const Shimmer = ({
 export const MovieCardShimmer = ({ className = '' }) => (
   <div className={`flex-shrink-0 ${className}`} style={{ width: 'clamp(130px, 22vw, 200px)', minWidth: '130px' }}>
     <div className="w-full h-auto rounded-lg overflow-hidden">
-      <Shimmer height="280px" borderRadius="8px" variant="wave" className="w-full" />
+      <Shimmer 
+        height="280px" 
+        borderRadius="8px"
+        variant="wave"
+        className="w-full"
+      />
     </div>
   </div>
 );
@@ -51,7 +56,12 @@ export const MovieListShimmer = ({ title = true, className = '' }) => (
     <div className="px-2 sm:px-4 relative z-10 pt-6 sm:pt-8 md:pt-12 lg:pt-15">
       {title && (
         <div className="mb-2 sm:mb-3 md:mb-4 px-1 sm:px-0">
-          <Shimmer height="24px" width="200px" variant="pulse" className="mb-2" />
+          <Shimmer 
+            height="24px" 
+            width="200px" 
+            variant="pulse"
+            className="mb-2"
+          />
         </div>
       )}
       
@@ -72,20 +82,54 @@ export const MovieListShimmer = ({ title = true, className = '' }) => (
 // Video Title Shimmer
 export const VideoTitleShimmer = ({ className = '' }) => (
   <div className={`max-w-2xl ${className}`}>
-    <Shimmer height="48px" width="80%" variant="wave" className="mb-4" />
-    <Shimmer height="20px" width="100%" variant="pulse" className="mb-2" />
-    <Shimmer height="20px" width="90%" variant="pulse" className="mb-2" />
-    <Shimmer height="20px" width="70%" variant="pulse" />
+    <Shimmer 
+      height="48px" 
+      width="80%" 
+      variant="wave"
+      className="mb-4"
+    />
+    <Shimmer 
+      height="20px" 
+      width="100%" 
+      variant="pulse"
+      className="mb-2"
+    />
+    <Shimmer 
+      height="20px" 
+      width="90%" 
+      variant="pulse"
+      className="mb-2"
+    />
+    <Shimmer 
+      height="20px" 
+      width="70%" 
+      variant="pulse"
+    />
   </div>
 );
 
 // Header Shimmer
 export const HeaderShimmer = ({ className = '' }) => (
   <div className={`flex items-center justify-between px-4 sm:px-6 lg:px-8 py-4 ${className}`}>
-    <Shimmer height="40px" width="120px" variant="glow" borderRadius="8px" />
+    <Shimmer 
+      height="40px" 
+      width="120px" 
+      variant="glow"
+      borderRadius="8px"
+    />
     <div className="flex items-center gap-4">
-      <Shimmer height="36px" width="80px" variant="pulse" borderRadius="20px" />
-      <Shimmer height="36px" width="36px" variant="wave" borderRadius="50%" />
+      <Shimmer 
+        height="36px" 
+        width="80px" 
+        variant="pulse"
+        borderRadius="20px"
+      />
+      <Shimmer 
+        height="36px" 
+        width="36px" 
+        variant="wave"
+        borderRadius="50%"
+      />
     </div>
   </div>
 );
@@ -94,8 +138,20 @@ export const HeaderShimmer = ({ className = '' }) => (
 export const SearchBarShimmer = ({ className = '' }) => (
   <div className={`w-full max-w-md md:max-w-2xl mx-auto bg-gray-800 border border-gray-600 rounded-lg shadow-2xl ${className}`}>
     <div className="flex flex-col md:grid md:grid-cols-12 gap-3 md:gap-3 p-4">
-      <Shimmer height="48px" width="100%" variant="wave" borderRadius="8px" className="md:col-span-9" />
-      <Shimmer height="48px" width="100%" variant="pulse" borderRadius="8px" className="md:col-span-3" />
+      <Shimmer 
+        height="48px" 
+        width="100%" 
+        variant="wave"
+        borderRadius="8px"
+        className="md:col-span-9"
+      />
+      <Shimmer 
+        height="48px" 
+        width="100%" 
+        variant="pulse"
+        borderRadius="8px"
+        className="md:col-span-3"
+      />
     </div>
   </div>
 );
@@ -106,9 +162,15 @@ export const GPTSuggestionsShimmer = ({ className = '' }) => (
     <div className="px-4 sm:px-6 md:px-8 lg:px-12 py-6 sm:py-8 md:py-10">
       {/* Header */}
       <div className="mb-6 sm:mb-8 md:mb-10 text-center">
-        <Shimmer height="32px" width="300px" variant="pulse" className="mx-auto mb-4" />
+        <Shimmer 
+          height="32px" 
+          width="300px" 
+          variant="pulse"
+          className="mx-auto mb-4"
+        />
         <div className="w-16 sm:w-20 md:w-24 h-1 bg-gray-600 mx-auto"></div>
       </div>
+      
       {/* Movie Lists */}
       <div className="space-y-6 sm:space-y-8 md:space-y-10">
         {Array.from({ length: 3 }).map((_, index) => (
@@ -121,10 +183,152 @@ export const GPTSuggestionsShimmer = ({ className = '' }) => (
   </div>
 );
 
+// Loading Overlay Shimmer
+export const LoadingOverlayShimmer = ({ className = '' }) => (
+  <div className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ${className}`}>
+    <div className="bg-gray-800 p-6 rounded-lg max-w-sm w-full mx-4">
+      <div className="flex items-center justify-center mb-4">
+        <Shimmer 
+          height="40px" 
+          width="40px" 
+          variant="glow"
+          borderRadius="50%"
+        />
+      </div>
+      <Shimmer 
+        height="20px" 
+        width="100%" 
+        variant="pulse"
+        className="mb-2"
+      />
+      <Shimmer 
+        height="16px" 
+        width="80%" 
+        variant="pulse"
+      />
+    </div>
+  </div>
+);
+
+// Skeleton Text Shimmer
+export const TextShimmer = ({ 
+  lines = 3, 
+  className = '',
+  variant = 'pulse' 
+}) => (
+  <div className={className}>
+    {Array.from({ length: lines }).map((_, index) => (
+      <Shimmer 
+        key={index}
+        height="16px" 
+        width={index === lines - 1 ? '70%' : '100%'} 
+        variant={variant}
+        className="mb-2"
+      />
+    ))}
+  </div>
+);
+
+// Button Shimmer
+export const ButtonShimmer = ({ 
+  width = '120px', 
+  height = '40px',
+  className = '' 
+}) => (
+  <Shimmer 
+    height={height} 
+    width={width} 
+    variant="wave"
+    borderRadius="8px"
+    className={className}
+  />
+);
+
+// Image Shimmer
+export const ImageShimmer = ({ 
+  width = '100%', 
+  height = '200px',
+  borderRadius = '8px',
+  className = '' 
+}) => (
+  <Shimmer 
+    height={height} 
+    width={width} 
+    variant="wave"
+    borderRadius={borderRadius}
+    className={className}
+  />
+);
+
+// Card Shimmer
+export const CardShimmer = ({ className = '' }) => (
+  <div className={`p-4 border border-gray-700 rounded-lg ${className}`}>
+    <ImageShimmer height="150px" className="mb-4" />
+    <TextShimmer lines={2} />
+    <div className="mt-4 flex justify-between items-center">
+      <ButtonShimmer width="80px" height="32px" />
+      <Shimmer height="20px" width="60px" variant="pulse" />
+    </div>
+  </div>
+);
+
+// Grid Shimmer
+export const GridShimmer = ({ 
+  columns = 3, 
+  rows = 2, 
+  className = '' 
+}) => (
+  <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-${columns} gap-4 ${className}`}>
+    {Array.from({ length: columns * rows }).map((_, index) => (
+      <CardShimmer key={index} />
+    ))}
+  </div>
+);
+
+// Table Shimmer
+export const TableShimmer = ({ 
+  rows = 5, 
+  columns = 4,
+  className = '' 
+}) => (
+  <div className={`overflow-x-auto ${className}`}>
+    <table className="w-full">
+      <thead>
+        <tr>
+          {Array.from({ length: columns }).map((_, index) => (
+            <th key={index} className="px-4 py-2 text-left">
+              <Shimmer height="20px" width="100px" variant="pulse" />
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {Array.from({ length: rows }).map((_, rowIndex) => (
+          <tr key={rowIndex}>
+            {Array.from({ length: columns }).map((_, colIndex) => (
+              <td key={colIndex} className="px-4 py-2">
+                <Shimmer height="16px" width="80px" variant="wave" />
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
+
 // Main Container Shimmer
 export const MainContainerShimmer = ({ className = '' }) => (
   <div className={`relative w-full h-screen ${className}`}>
-    <Shimmer height="100vh" width="100%" variant="wave" className="absolute inset-0" />
+    {/* Background shimmer */}
+    <Shimmer 
+      height="100vh" 
+      width="100%" 
+      variant="wave"
+      className="absolute inset-0"
+    />
+    
+    {/* Content shimmer */}
     <div className="absolute inset-0 flex items-center z-10 px-4 sm:px-8 md:px-12 lg:px-16">
       <VideoTitleShimmer />
     </div>
@@ -134,23 +338,35 @@ export const MainContainerShimmer = ({ className = '' }) => (
 // Custom Hook for Shimmer States
 export const useShimmer = (isLoading, delay = 0) => {
   const [showShimmer, setShowShimmer] = React.useState(isLoading);
+  
   React.useEffect(() => {
     if (isLoading) {
       setShowShimmer(true);
     } else {
-      const timer = setTimeout(() => setShowShimmer(false), delay);
+      const timer = setTimeout(() => {
+        setShowShimmer(false);
+      }, delay);
       return () => clearTimeout(timer);
     }
   }, [isLoading, delay]);
+  
   return showShimmer;
 };
 
 // Shimmer Wrapper Component
-export const ShimmerWrapper = ({ isLoading, children, shimmerComponent, delay = 0, className = '' }) => {
+export const ShimmerWrapper = ({ 
+  isLoading, 
+  children, 
+  shimmerComponent, 
+  delay = 0,
+  className = '' 
+}) => {
   const showShimmer = useShimmer(isLoading, delay);
+  
   if (showShimmer) {
     return shimmerComponent || <Shimmer className={className} />;
   }
+  
   return children;
 };
 

@@ -1,14 +1,15 @@
-import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { auth } from '../utils/firebase';
-import { SUPPORTED_LANGUAGES } from '../utils/constants';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { removeUser, addUser } from '../utils/userSlice';
-import { toggleGptSearchView } from '../utils/gptSlice';
-import { changeLanguage } from '../utils/configSlice';
-import { HeaderShimmer } from './Shimmer';
+import { onAuthStateChanged, signOut } from 'firebase/auth'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { auth } from '../utils/firebase'
+import { SUPPORTED_LANGUAGES } from '../utils/constants'
+import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { removeUser, addUser } from '../utils/userSlice'
+import { toggleGptSearchView } from '../utils/gptSlice'
+import { changeLanguage } from '../utils/configSlice'
+import { HeaderShimmer } from './Shimmer'
+
 
 const Header = () => {
   const navigate = useNavigate();
@@ -18,18 +19,16 @@ const Header = () => {
   const langKey = useSelector((store) => store.config.lang);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Sign out the user
   const handlesignOut = () => {
     signOut(auth)
       .then(() => {
         navigate('/');
       })
       .catch((error) => {
-        navigate('/error');
+        navigate('/error')
       });
-  };
+  }
 
-  // Listen for Firebase auth state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -52,12 +51,11 @@ const Header = () => {
     return () => unsubscribe();
   }, []);
 
-  // Toggle GPT Search button
   const handleGPTSearchClick = () => {
-    dispatch(toggleGptSearchView());
-  };
+    // Toggle GPT Search button
+    dispatch(toggleGptSearchView())
+  }
 
-  // Change app language
   const handleLanguageChange = (e) => {
     dispatch(changeLanguage(e.target.value));
   };
@@ -69,7 +67,6 @@ const Header = () => {
 
   return (
     <div className="absolute w-full flex flex-col gap-2 md:flex-row justify-center md:justify-between items-center py-5 px-15 bg-gradient-to-b from-black z-50">
-      
       {/* Logo */}
       <img
         className="w-44"
@@ -80,11 +77,9 @@ const Header = () => {
       {/* Right Section */}
       {user && (
         <div className="flex items-center space-x-4">
-          <button
-            className="bg-purple-700 text-white font-bold px-4 py-1 rounded hover:bg-purple-800"
-            onClick={handleGPTSearchClick}
-          >
-            {showGPTSearch ? "HomePage" : "GPT Search"}
+          <button className="bg-purple-700 text-white font-bold px-4 py-1 rounded hover:bg-purple-800"
+            onClick={handleGPTSearchClick}>
+              {showGPTSearch ? "HomePage" : "GPT Search"}
           </button>
 
           {/* Language Dropdown */}
@@ -100,17 +95,17 @@ const Header = () => {
                 </option>
               ))}
             </select>
-          )}
+
+          )
+          }
 
           {/* Sign Out Button */}
-          <button
-            className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
-            onClick={handlesignOut}
-          >
+          <button className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700" onClick={handlesignOut}>
             Sign Out
           </button>
         </div>
-      )}
+      )
+      }
     </div>
   );
 };

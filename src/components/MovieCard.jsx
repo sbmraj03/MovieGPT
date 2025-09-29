@@ -1,17 +1,17 @@
-import { IMG_CDN_URL, API_OPTIONS } from "../utils/constants";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setCurrentlyPlayingMovieId } from "../utils/moviesSlice";
+import { IMG_CDN_URL, API_OPTIONS } from "../utils/constants"
+import { useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import FullscreenVideoPlayer from "./FullscreenVideoPlayer"
+import { setCurrentlyPlayingMovieId } from "../utils/moviesSlice"
 
-const MovieCard = ({ posterPath, movieData }) => {
+const MovieCard = ({posterPath, movieData}) => {
   const dispatch = useDispatch();
   const currentlyPlayingMovieId = useSelector(store => store.movies?.currentlyPlayingMovieId);
-  const [isPlayingVideo, setIsPlayingVideo] = useState(false); // local state for this card
-  const [trailerKey, setTrailerKey] = useState(null); // YouTube trailer key
+  const [isPlayingVideo, setIsPlayingVideo] = useState(false);
+  const [trailerKey, setTrailerKey] = useState(null);
   
-  if(!posterPath) return null; // don't render if no poster
+  if(!posterPath) return null;
 
-  // Play button click handler
   const handlePlayClick = async (e) => {
     e.stopPropagation();
     if (!movieData?.id) return alert('Trailer not available for this movie');
@@ -21,35 +21,41 @@ const MovieCard = ({ posterPath, movieData }) => {
       const json = await res.json();
       const trailers = (json?.results || []).filter(v => v.type === 'Trailer');
       const video = trailers.length > 0 ? trailers[0] : (json?.results || [])[0];
-
       if (video?.key) {
         setTrailerKey(video.key);
-        // Mark this card as currently playing globally
+        // Mark this card as the global currently playing
         dispatch(setCurrentlyPlayingMovieId(movieData.id));
         setIsPlayingVideo(true);
       } else {
         alert('Trailer not available for this movie');
       }
     } catch (err) {
-      console.error('Failed to fetch trailer', err); // could comment out if needed
+      console.error('Failed to fetch trailer', err);
       alert('Failed to load trailer');
     }
   };
 
-  // Close video handler
   const handleCloseVideo = () => {
     setIsPlayingVideo(false);
     setTrailerKey(null);
-    // Clear global playing if this card was active
+    // Clear global playing if this card was the active one
     if (currentlyPlayingMovieId === movieData?.id) {
       dispatch(setCurrentlyPlayingMovieId(null));
+    }
+  };
+  
+  const [showOverlayPlayer, setShowOverlayPlayer] = useState(false);
+  const handleOpenFullscreenOverlay = (e) => {
+    e.stopPropagation();
+    if (trailerKey) {
+      setShowOverlayPlayer(true);
     }
   };
   
   return (
     <div className="w-full h-full group cursor-pointer relative">
       <div className="relative overflow-hidden rounded-lg shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl">
-        {/* Show poster if not playing or another card is playing */}
+        {/* If another card is playing, ensure this one shows poster */}
         {(!isPlayingVideo || currentlyPlayingMovieId !== movieData?.id) ? (
           <>
             <img 
@@ -77,10 +83,10 @@ const MovieCard = ({ posterPath, movieData }) => {
             <div className="w-full h-full aspect-[2/3] bg-black rounded-lg overflow-hidden">
               <iframe
                 className="w-full h-full"
-                src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&mute=0&controls=1&showinfo=1&rel=0&modestbranding=1&fs=1&cc_load_policy=1`}
+                src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&mute=0&controls=1&showinfo=1&rel=0&modestbranding=1&fs=1&cc_load_policy=1&playsinline=1`}
                 title={`${movieData?.title || 'Movie'} Trailer`}
                 frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                 allowFullScreen
               />
             </div>
@@ -97,8 +103,15 @@ const MovieCard = ({ posterPath, movieData }) => {
           </>
         )}
       </div>
+      {showOverlayPlayer && trailerKey && (
+        <FullscreenVideoPlayer
+          trailerKey={trailerKey}
+          forceFullscreen={true}
+          onClose={() => setShowOverlayPlayer(false)}
+        />
+      )}
     </div>
-  );
-};
+  )
+}
 
-export default MovieCard;
+export default MovieCard

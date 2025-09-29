@@ -10,20 +10,19 @@ import { BG_URL } from "../utils/constants";
 import Shimmer from "./Shimmer";
 
 const Login = () => {
-  const [isSignInForm, setIsSignInForm]= useState(true); // toggle between sign in / sign up
-  const [errorMessage, setErrorMessage]= useState(null); // store validation / firebase errors
-  const [isLoading, setIsLoading] = useState(false); // loading state for async actions
+  const [isSignInForm, setIsSignInForm]= useState(true)
+  const [errorMessage, setErrorMessage]= useState(null)
+  const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate();
   const dispatch = useDispatch(); 
 
-  const name= useRef(null);
-  const email= useRef(null);
-  const password= useRef(null);
+  const name= useRef(null)
+  const email= useRef(null)
+  const password= useRef(null)
 
-  // Handle Sign In / Sign Up button click
   const handleButtonClick = () => {
-    const message = checkValidData(email.current.value, password.current.value);
-    setErrorMessage(message);
+    const message = checkValidData(email.current.value, password.current.value)
+    setErrorMessage(message)
 
     if (message) {
       setTimeout(() => {
@@ -35,7 +34,6 @@ const Login = () => {
     setIsLoading(true);
 
     if(!isSignInForm){
-      // Sign Up flow
       createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
       .then((userCredential) => {
         const user = userCredential.user;
@@ -45,14 +43,14 @@ const Login = () => {
          .then(() => {
            const { uid, email, displayName} = auth.currentUser;
            dispatch(addUser({uid: uid, email: email, displayName: displayName}));
-           navigate("/browse");
+           navigate("/browse")
          })
          .catch((error) => {
-           setErrorMessage(error.message);
+           setErrorMessage(error.message)
          })
          .finally(() => {
            setIsLoading(false);
-         });
+         })
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -61,11 +59,10 @@ const Login = () => {
       });
     }
     else{
-      // Sign In flow
       signInWithEmailAndPassword(auth, email.current.value, password.current.value)
       .then((userCredential) => {
         const user = userCredential.user;
-        navigate("/browse");
+        navigate("/browse")
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -73,14 +70,12 @@ const Login = () => {
         setErrorMessage(errorCode + " " + errorMessage);
       });
     }
-  };
+  }
 
-  // Toggle between Sign In / Sign Up form
   const toggleSignInForm= () => {
-    setIsSignInForm(!isSignInForm);
-  };
+    setIsSignInForm(!isSignInForm)
+  }
 
-  // Guest login handler
   const handleGuestLogin = () => {
     const guestEmail = "guest_user@gmail.com";
     const guestPassword = "Guest@1234";
@@ -95,7 +90,7 @@ const Login = () => {
         const errorMessage = error.message;
         setErrorMessage(`Guest login failed: ${errorCode} - ${errorMessage}`);
       });
-  };
+  }
 
   return (
     <div className="relative w-full min-h-screen overflow-hidden">
@@ -116,7 +111,7 @@ const Login = () => {
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/60" />
 
-      {/* Sign In / Sign Up Form */}
+      {/* Sign In Form - Added pt-20 to account for fixed header */}
       <div className="relative z-10 flex items-center justify-center min-h-screen px-4 pt-20 pb-8">
         <div className="bg-black/80 backdrop-blur-sm px-6 sm:px-8 md:px-12 py-8 sm:py-10 md:py-12 rounded-lg w-full max-w-md text-white">
           <h1 className="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8">
@@ -145,14 +140,12 @@ const Login = () => {
               className="bg-gray-700/80 text-white px-4 py-3 sm:py-4 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 transition-all"
             />
 
-            {/* Error message */}
             {errorMessage && (
               <p className="text-red-500 font-medium text-sm sm:text-base py-2">
                 {errorMessage}
               </p>
             )}
 
-            {/* Submit Button */}
             <button 
               className="bg-red-600 hover:bg-red-700 active:bg-red-800 font-semibold py-3 sm:py-4 rounded-md transition-colors duration-200"
               onClick={handleButtonClick}
@@ -161,7 +154,6 @@ const Login = () => {
             </button>
           </form>
 
-          {/* Remember Me */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-6 gap-4 sm:gap-2 text-sm text-gray-400">
             <label className="flex items-center gap-2 cursor-pointer hover:text-white transition-colors">
               <input type="checkbox" className="accent-red-600" />
@@ -169,7 +161,6 @@ const Login = () => {
             </label>
           </div>
 
-          {/* Toggle Form Link */}
           <div className="text-sm text-gray-400 mt-6 sm:mt-8">
             {isSignInForm ? "New to Netflix?" : "Already a User?"}{" "}
             <button 
