@@ -11,29 +11,27 @@ import SecondaryContainer from "./SecondaryContainer"
 import Footer from "./Footer"
 
 const Browse = () => {
-  const showGPTSearch = useSelector(store => store.gpt.showGptSearch);
+  const showGPTSearch = useSelector(store => store.gpt.showGptSearch); // check if GPT search mode is active
 
-
+  // fetch movies data when component mounts
   useGetNowPlayingMovies();
   useGetTrendingMovies();
   useGetPopularMovies();
   useGetUpcomingMovies();
   useGetTopRatedMovies();
 
-
   return (
     <div>
       <Header />
       {showGPTSearch ? (
-        <GPTSearch />
+        <GPTSearch />   // show GPT search results
       ) : (
         <>
-          <MainContainer />
-          <SecondaryContainer />
+          <MainContainer />     {/* Hero/banner movies */}
+          <SecondaryContainer /> {/* Movie lists/rows */}
           <Footer />
         </>
-      )
-      }
+      )}
     </div>
   )
 }

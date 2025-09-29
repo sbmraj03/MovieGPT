@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 
-// Overlay player; can optionally use browser Fullscreen API.
-// forceFullscreen=true will request browser fullscreen on mount.
+// Overlay video player; can optionally trigger browser fullscreen.
 const FullscreenVideoPlayer = ({ trailerKey, onClose, forceFullscreen = false }) => {
   const overlayRef = useRef(null);
-  // Lock page scroll while the overlay is open
+
+  // Lock page scroll while overlay is open
   useEffect(() => {
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -13,6 +13,7 @@ const FullscreenVideoPlayer = ({ trailerKey, onClose, forceFullscreen = false })
     };
   }, []);
 
+  // Handle fullscreen if enabled
   useEffect(() => {
     if (!forceFullscreen) return;
     const elem = overlayRef.current || document.documentElement;
@@ -21,28 +22,33 @@ const FullscreenVideoPlayer = ({ trailerKey, onClose, forceFullscreen = false })
       try {
         req.call(elem);
       } catch (e) {
-        // ignore
+        // ignore if fullscreen request fails
       }
     }
+
     const handleFsChange = () => {
-      // When the user exits browser fullscreen (Esc), close the overlay
+      // Close overlay if user exits fullscreen
       if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
         onClose();
       }
     };
+
     document.addEventListener('fullscreenchange', handleFsChange);
     document.addEventListener('webkitfullscreenchange', handleFsChange);
     document.addEventListener('msfullscreenchange', handleFsChange);
+
     return () => {
       document.removeEventListener('fullscreenchange', handleFsChange);
       document.removeEventListener('webkitfullscreenchange', handleFsChange);
       document.removeEventListener('msfullscreenchange', handleFsChange);
     };
   }, [forceFullscreen]);
+
   const handleClose = () => {
     onClose();
   };
 
+  // Close on Esc key
   const handleKeyDown = (e) => {
     if (e.key === 'Escape') {
       handleClose();
@@ -60,7 +66,7 @@ const FullscreenVideoPlayer = ({ trailerKey, onClose, forceFullscreen = false })
 
   return (
     <div ref={overlayRef} className="fixed inset-0 z-[9999] bg-black">
-      {/* YouTube Video */}
+      {/* Embedded YouTube trailer */}
       <div className="absolute inset-0">
         <iframe
           className="absolute inset-0 w-full h-full"

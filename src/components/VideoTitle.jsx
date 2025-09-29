@@ -25,15 +25,16 @@ const VideoTitle = ({ title, overview, movieId, trailerKey }) => {
       </p>
 
       {/* Action buttons */}
-<div className="flex gap-2 sm:gap-4">
-  <button 
-    onClick={handlePlayClick}
-    className="px-4 sm:px-6 py-2 bg-white text-black font-semibold rounded-md hover:bg-gray-200 transition-all cursor-pointer text-sm sm:text-base flex items-center gap-2 hover:scale-105 transform"
-  >
-    <span className="text-lg">▶</span>
-    Play Now
-  </button>
-</div>
+      <div className="flex gap-2 sm:gap-4">
+        <button 
+          onClick={handlePlayClick}
+          className="px-4 sm:px-6 py-2 bg-white text-black font-semibold rounded-md hover:bg-gray-200 transition-all cursor-pointer text-sm sm:text-base flex items-center gap-2 hover:scale-105 transform"
+        >
+          <span className="text-lg">▶</span>
+          Play Now
+        </button>
+      </div>
+
       {showPlayer && (
         <FullscreenVideoPlayer
           trailerKey={trailerKey}
@@ -42,7 +43,7 @@ const VideoTitle = ({ title, overview, movieId, trailerKey }) => {
         />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default VideoTitle
+export default VideoTitle;

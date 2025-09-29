@@ -6,25 +6,27 @@ import { MainContainerShimmer } from "./Shimmer";
 import useMovieTrailer from "../hooks/useMovieTrailer";
 
 const MainContainer = () => {
-    const movies = useSelector(store => store.movies?.trendingMovies)
-    const trailerVideo = useSelector(store => store.movies?.trailerVideo)
-    const mainMovie = movies?.[1]
-    const movieId = mainMovie?.id
+    const movies = useSelector(store => store.movies?.trendingMovies); // get trending movies from Redux
+    const trailerVideo = useSelector(store => store.movies?.trailerVideo); // current trailer video
+    const mainMovie = movies?.[1]; // choose the second trending movie as main
+    const movieId = mainMovie?.id;
 
-    // Call hooks at the top level
-    useMovieTrailer(movieId)
+    // Fetch trailer video for the main movie
+    useMovieTrailer(movieId);
 
-    // If data isn't ready, show shimmer
+    // Show shimmer while data isn't ready
     if(!movies || !mainMovie) {
         return <MainContainerShimmer />;
     }
 
-    const {original_title, overview} = mainMovie
+    const { original_title, overview } = mainMovie;
 
-    return(
+    return (
         <div className="relative w-full h-screen">
-            {/* While trailer loads, still show the background (will update when ready) */}
-            <VideoBackground movieId={movieId}/>
+            {/* Background video */}
+            <VideoBackground movieId={movieId} />
+            
+            {/* Movie title and overview overlay */}
             <div className="absolute inset-0 flex items-center z-10 px-4 sm:px-8 md:px-12 lg:px-16">
                 <VideoTitle 
                     title={original_title} 
@@ -34,7 +36,7 @@ const MainContainer = () => {
                 />
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default MainContainer
+export default MainContainer;

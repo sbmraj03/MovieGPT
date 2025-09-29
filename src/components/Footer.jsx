@@ -8,7 +8,7 @@ const Footer = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
                     
-                    {/* Left - Brand */}
+                    {/* Left - Brand / App Info */}
                     <div className="text-center md:text-left space-y-2">
                         <h3 className="text-red-600 text-3xl font-extrabold tracking-wider">
                             MovieGPT
@@ -40,6 +40,7 @@ const Footer = () => {
 
                     {/* Right - Social Links */}
                     <div className="flex justify-center md:justify-end gap-4">
+                        {/* LinkedIn */}
                         <a
                             href="https://www.linkedin.com/in/shubham-kumar-080852248/"
                             target="_blank"
@@ -54,6 +55,7 @@ const Footer = () => {
                             />
                         </a>
 
+                        {/* GitHub */}
                         <a
                             href="https://github.com/sbmraj03/"
                             target="_blank"
@@ -68,6 +70,7 @@ const Footer = () => {
                             />
                         </a>
 
+                        {/* Portfolio */}
                         <a
                             href="https://personal-portfolio-sbmraj03.vercel.app/"
                             target="_blank"
@@ -89,4 +92,3 @@ const Footer = () => {
 };
 
 export default Footer;
-  

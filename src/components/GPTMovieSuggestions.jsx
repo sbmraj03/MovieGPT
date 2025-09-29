@@ -2,8 +2,10 @@ import { useSelector } from "react-redux";
 import MovieList from "./MovieList";
 
 const GptMovieSuggestions = () => {
+  // Extract GPT movie suggestions from redux store
   const { movieResults, movieNames } = useSelector((store) => store.gpt);
-  if (!movieNames) return null;
+
+  if (!movieNames) return null; // no suggestions -> don't render
 
   return (
     <div className="p-4 bg-black/95 mt-12 text-white mx-4">
@@ -13,8 +15,8 @@ const GptMovieSuggestions = () => {
         {movieNames.map((movieName, index) => (
           <MovieList
             key={movieName}
-            title={movieName}
-            movies={movieResults[index]?.filter(movie => movie?.poster_path)}
+            title={movieName} // category/title of movies
+            movies={movieResults[index]?.filter(movie => movie?.poster_path)} // filter out movies without posters
           />
         ))}
       </div>

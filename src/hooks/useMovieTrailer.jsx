@@ -3,16 +3,15 @@ import { addTrailerVideo } from "../utils/moviesSlice"
 import { API_OPTIONS } from "../utils/constants"
 import { useEffect } from "react"
 
-
+// Custom hook to fetch and store the trailer video for a given movie
 const useMovieTrailer = (movieId) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        let isMounted = true;
+        let isMounted = true; // Flag to prevent state updates after unmount
 
         const getMovieVideos = async () => {
-            // Don't fetch if no movieId
-            if (!movieId) return;
+            if (!movieId) return; // Skip if movieId is not provided
             
             try {
                 const data = await fetch(
@@ -21,8 +20,9 @@ const useMovieTrailer = (movieId) => {
                 );
                 const json = await data.json();
 
-                if (!json.results?.length) return;
+                if (!json.results?.length) return; // No videos available
 
+                // Prefer trailers, fallback to first available video
                 const filterdata = json.results.filter(video => video.type === "Trailer");
                 const trailer = filterdata.length ? filterdata[0] : json.results[0];
                 
@@ -38,7 +38,7 @@ const useMovieTrailer = (movieId) => {
 
         getMovieVideos();
 
-        // Cleanup function
+        // Cleanup to prevent updates on unmounted component
         return () => {
             isMounted = false;
         };
@@ -46,4 +46,3 @@ const useMovieTrailer = (movieId) => {
 }
 
 export default useMovieTrailer
-

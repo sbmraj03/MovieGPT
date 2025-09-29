@@ -5,7 +5,7 @@ import GPTMovieSuggestions from "./GPTMovieSuggestions";
 const GPTSearch = () => {
     return (
         <div className="relative min-h-screen">
-            {/* Background Image */}
+            {/* Background image */}
             <div className="absolute inset-0 z-0">
                 <img
                     className="w-full h-full object-cover"
@@ -13,11 +13,11 @@ const GPTSearch = () => {
                     alt="background"
                 />
             </div>
-            {/* Search Bar with higher z-index */}
+
+            {/* Search bar + suggestions (overlayed above background) */}
             <div className="relative z-10 pt-32 md:pt-0">
                 <GptSearchBar />
                 <GPTMovieSuggestions />
-                
             </div>
         </div>
     )

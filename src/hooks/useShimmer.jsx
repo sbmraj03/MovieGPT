@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
-// Custom hook for managing shimmer loading states
+// Basic shimmer state hook
+// Manages whether a shimmer loader should be displayed based on `isLoading` with optional delay
 export const useShimmer = (isLoading, delay = 0) => {
   const [showShimmer, setShowShimmer] = useState(isLoading);
   
@@ -8,6 +9,7 @@ export const useShimmer = (isLoading, delay = 0) => {
     if (isLoading) {
       setShowShimmer(true);
     } else {
+      // Add optional delay before hiding shimmer
       const timer = setTimeout(() => {
         setShowShimmer(false);
       }, delay);
@@ -18,7 +20,7 @@ export const useShimmer = (isLoading, delay = 0) => {
   return showShimmer;
 };
 
-// Hook for managing API loading states with shimmer
+// Hook for single API call with shimmer support
 export const useApiWithShimmer = (apiCall, dependencies = []) => {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(null);
@@ -44,7 +46,7 @@ export const useApiWithShimmer = (apiCall, dependencies = []) => {
   return { data, isLoading, error };
 };
 
-// Hook for managing multiple API calls with shimmer
+// Hook for multiple API calls with shimmer
 export const useMultipleApiWithShimmer = (apiCalls) => {
   const [loadingStates, setLoadingStates] = useState({});
   const [data, setData] = useState({});
@@ -75,7 +77,7 @@ export const useMultipleApiWithShimmer = (apiCalls) => {
   return { data, loadingStates, errors };
 };
 
-// Hook for managing pagination with shimmer
+// Hook for pagination with shimmer support
 export const usePaginationWithShimmer = (apiCall, initialPage = 1) => {
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [isLoading, setIsLoading] = useState(true);
@@ -131,7 +133,7 @@ export const usePaginationWithShimmer = (apiCall, initialPage = 1) => {
   };
 };
 
-// Hook for managing search with shimmer
+// Hook for search functionality with shimmer and debounce
 export const useSearchWithShimmer = (searchApi, debounceMs = 300) => {
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -171,7 +173,7 @@ export const useSearchWithShimmer = (searchApi, debounceMs = 300) => {
   };
 };
 
-// Hook for managing infinite scroll with shimmer
+// Hook for infinite scroll with shimmer support
 export const useInfiniteScrollWithShimmer = (apiCall, threshold = 0.1) => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
