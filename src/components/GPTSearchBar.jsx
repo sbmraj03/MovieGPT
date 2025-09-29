@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import lang from "../utils/languageConstants";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import genAI from "../utils/genai";
 import { API_OPTIONS } from "../utils/constants";
 import { addGptMovieResult } from "../utils/gptSlice";
@@ -9,6 +9,7 @@ const GPTSearchBar = () => {
     const dispatch = useDispatch();
     const langKey = useSelector((store) => store.config.lang);
     const searchText = useRef(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     // search movie in TMDB
     const searchMovieTMDB = async (movie) => {
@@ -23,7 +24,6 @@ const GPTSearchBar = () => {
         return json.results;
     };
 
-
     const handleGeminiSearchClick = async () => {
         console.log("Search input:", searchText.current.value);
 
@@ -31,6 +31,8 @@ const GPTSearchBar = () => {
             console.log("No search text provided");
             return;
         }
+
+        setIsLoading(true);
 
         try {
             console.log("Initializing Gemini model...");
@@ -40,7 +42,7 @@ const GPTSearchBar = () => {
             const gptQuery =
                 "Act as a Movie Recommendation system and suggest some movies for the query: " +
                 searchText.current.value +
-                ". Only give me names of 5 movies, comma separated. Example: Gadar, Sholay, Don, Golmaal, Koi Mil Gaya";
+                ". IMPORTANT: Only respond with exactly 5 movie names separated by commas. No other text, no explanations, no formatting. Example format: Gadar, Sholay, Don, Golmaal, Koi Mil Gaya";
 
             console.log("Sending query to Gemini:", gptQuery);
             const geminiResult = await model.generateContent(gptQuery);
@@ -54,8 +56,20 @@ const GPTSearchBar = () => {
             const textResult = geminiResult.response.text();
             console.log("Gemini Response:", textResult);
 
-            // Process the movie names from Gemini response
-            const gptMovies = textResult.split(',').map(movie => movie.trim());
+            // Extract only movie names from the response
+            // Remove any introductory text and get only the comma-separated names
+            let movieNames = textResult;
+            
+            // If response contains ":" extract everything after the last ":"
+            if (textResult.includes(':')) {
+                movieNames = textResult.split(':').pop();
+            }
+            
+            // Clean up and split the movie names
+            const gptMovies = movieNames
+                .split(',')
+                .map(movie => movie.trim())
+                .filter(movie => movie.length > 0);
             console.log("GPT Movie Names:", gptMovies);
 
             // For each movie, search TMDB API
@@ -74,6 +88,8 @@ const GPTSearchBar = () => {
 
         } catch (error) {
             console.error("Error fetching Gemini results:", error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -87,18 +103,20 @@ const GPTSearchBar = () => {
                     <input
                         ref={searchText}
                         type="text"
-                        className="w-full md:col-span-9 p-4 md:mr-4 bg-gray-700 text-white placeholder-gray-300 border border-gray-600 rounded focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 transition-all"
+                        disabled={isLoading}
+                        className="w-full md:col-span-9 p-4 md:mr-4 bg-gray-700 text-white placeholder-gray-300 border border-gray-600 rounded focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         placeholder={lang[langKey].gptSearchPlaceholder}
                     />
                     <button
-                        className="w-full md:col-span-3 py-4 md:py-2 px-4 bg-red-700 text-white rounded-lg hover:bg-red-800 active:bg-red-900 transition-colors font-medium"
+                        className="w-full md:col-span-3 py-4 md:py-2 px-4 bg-red-700 text-white rounded-lg hover:bg-red-800 active:bg-red-900 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-red-700"
                         onClick={handleGeminiSearchClick}
+                        disabled={isLoading}
                     >
-                        {lang[langKey].search}
+                        {isLoading ? "Searching..." : lang[langKey].search}
                     </button>
                 </div>
             </form>
         </div>
     );
 };
-export default GPTSearchBar
+export default GPTSearchBar;

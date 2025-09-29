@@ -20,7 +20,7 @@ const MovieList = ({ title, movies }) => {
           <div
             className="
               flex 
-              gap-3 sm:gap-4 md:gap-5 lg:gap-6
+              gap-4
               overflow-x-scroll 
               scroll-smooth 
               scrollbar-hide

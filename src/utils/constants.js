@@ -1,5 +1,3 @@
-export const LOGO = "https://upload.wikimedia.org/wikipedia/commons/7/7a/Logonetflix.png"
-
 export const API_URL_TRENDING = 'https://api.themoviedb.org/3/trending/movie/day?language=en-US'
 
 export const API_URL_NOW_PLAYING = 'https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1'

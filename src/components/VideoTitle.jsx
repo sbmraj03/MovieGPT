@@ -1,4 +1,17 @@
-const VideoTitle = ({ title, overview }) => {
+import { useState } from 'react';
+import FullscreenVideoPlayer from './FullscreenVideoPlayer';
+
+const VideoTitle = ({ title, overview, movieId, trailerKey }) => {
+  const [showPlayer, setShowPlayer] = useState(false);
+
+  const handlePlayClick = () => {
+    if (trailerKey) {
+      setShowPlayer(true);
+    } else {
+      alert('Trailer not available for this movie');
+    }
+  };
+
   return (
     <div className="absolute top-75 px-4 sm:px-8 md:px-12 w-full sm:w-3/4 md:w-1/2 text-white z-10">
       {/* Title */}
@@ -12,14 +25,22 @@ const VideoTitle = ({ title, overview }) => {
       </p>
 
       {/* Action buttons */}
-      <div className="flex gap-2 sm:gap-4">
-        <button className="px-4 sm:px-6 py-2 bg-white text-black font-semibold rounded-md hover:bg-gray-200 transition hover:cursor-pointer text-sm sm:text-base">
-          ▶ Play
-        </button>
-        <button className="px-4 sm:px-6 py-2 bg-gray-700 bg-opacity-70 text-white font-semibold rounded-md hover:bg-gray-600 transition hover:cursor-pointer text-sm sm:text-base">
-          ℹ More Info
-        </button>
-      </div>
+<div className="flex gap-2 sm:gap-4">
+  <button 
+    onClick={handlePlayClick}
+    className="px-4 sm:px-6 py-2 bg-white text-black font-semibold rounded-md hover:bg-gray-200 transition-all cursor-pointer text-sm sm:text-base flex items-center gap-2 hover:scale-105 transform"
+  >
+    <span className="text-lg">▶</span>
+    Play Now
+  </button>
+</div>
+      {showPlayer && (
+        <FullscreenVideoPlayer
+          trailerKey={trailerKey}
+          forceFullscreen={true}
+          onClose={() => setShowPlayer(false)}
+        />
+      )}
     </div>
   )
 }

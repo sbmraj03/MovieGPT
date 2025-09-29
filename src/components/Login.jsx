@@ -7,10 +7,12 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { BG_URL } from "../utils/constants";
+import Shimmer from "./Shimmer";
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm]= useState(true)
   const [errorMessage, setErrorMessage]= useState(null)
+  const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate();
   const dispatch = useDispatch(); 
 
@@ -29,6 +31,8 @@ const Login = () => {
       return;
     }
 
+    setIsLoading(true);
+
     if(!isSignInForm){
       createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
       .then((userCredential) => {
@@ -43,6 +47,9 @@ const Login = () => {
          })
          .catch((error) => {
            setErrorMessage(error.message)
+         })
+         .finally(() => {
+           setIsLoading(false);
          })
       })
       .catch((error) => {

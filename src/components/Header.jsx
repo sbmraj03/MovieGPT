@@ -2,12 +2,13 @@ import { onAuthStateChanged, signOut } from 'firebase/auth'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { auth } from '../utils/firebase'
-import { LOGO, SUPPORTED_LANGUAGES } from '../utils/constants'
-import { useEffect } from 'react'
+import { SUPPORTED_LANGUAGES } from '../utils/constants'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { removeUser, addUser } from '../utils/userSlice'
 import { toggleGptSearchView } from '../utils/gptSlice'
 import { changeLanguage } from '../utils/configSlice'
+import { HeaderShimmer } from './Shimmer'
 
 
 const Header = () => {
@@ -16,6 +17,7 @@ const Header = () => {
   const dispatch = useDispatch();
   const showGPTSearch = useSelector((store) => store.gpt.showGptSearch);
   const langKey = useSelector((store) => store.config.lang);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handlesignOut = () => {
     signOut(auth)
@@ -43,6 +45,7 @@ const Header = () => {
         dispatch(removeUser());
         navigate("/");
       }
+      setIsLoading(false);
     });
 
     return () => unsubscribe();
@@ -57,12 +60,17 @@ const Header = () => {
     dispatch(changeLanguage(e.target.value));
   };
 
+  // Show shimmer while loading
+  if (isLoading) {
+    return <HeaderShimmer className="absolute w-full py-5 px-15 bg-gradient-to-b from-black z-50" />;
+  }
+
   return (
     <div className="absolute w-full flex flex-col gap-2 md:flex-row justify-center md:justify-between items-center py-5 px-15 bg-gradient-to-b from-black z-50">
       {/* Logo */}
       <img
         className="w-44"
-        src={LOGO}
+        src="logo.png"
         alt="logo"
       />
 
